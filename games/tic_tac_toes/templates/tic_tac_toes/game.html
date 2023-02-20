@@ -1,0 +1,138 @@
+{% extends 'base.html' %} 
+{% block content %}
+    <div id="root">
+        <div class="place" id="place-1"></div>
+        <div class="place" id="place-2"></div>
+        <div class="place" id="place-3"></div>
+        <div class="place" id="place-4"></div>
+        <div class="place" id="place-5"></div>
+        <div class="place" id="place-6"></div>
+        <div class="place" id="place-7"></div>
+        <div class="place" id="place-8"></div>
+        <div class="place" id="place-9"></div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+    class Game {
+        constructor(){
+            this.players = ['X', 'O']
+            this.currentPlayer = this.players[0]
+            this.places = document.querySelectorAll('.place')
+            this.new_game()
+            this.placesRemaining = 9
+        }
+        
+        make_res_div = (winner) => {
+            let win_p = document.createElement('p')
+            win_p.innerText = `${winner} venceu!`
+            if (winner === undefined) {
+                win_p.innerText = 'Ninguém Venceu!'
+            } 
+            
+            
+        const win_div = document.createElement('div')
+        win_div.className = 'res-div'
+        win_div.addEventListener('click', () => {
+            game.restart_game()
+            win_div.remove()
+        })
+    
+    
+        win_div.appendChild(win_p)
+        document.body.appendChild(win_div)
+    }
+    
+    make_play = (id) => {
+        const json_id = JSON.stringify({
+            'place_id':id
+        })
+        ws.send(json_id)
+    }
+    
+    play = (e) => {
+        const place = e.currentTarget
+        if (place.innerText == false) {
+            this.make_play(place.id)
+            place.innerText = this.currentPlayer
+            const winner = this.checkWinner()
+            winner && this.win_game(winner)
+            this.next_turn()
+        }
+    }
+    
+    next_turn = () => {
+        this.setCurrentPlayer()
+    }
+    
+    win_game = (winner) => {
+        this.make_res_div(winner)
+        this.restart_game()
+    }
+
+    end_game = () => {
+        this.make_res_div()
+    }
+
+    restart_game = () => {
+        this.places.forEach((place) => place.innerText = null)
+        this.currentPlayer = this.players[0]
+        this.placesRemaining = 9
+    }
+    
+    new_game() {
+        this.places.forEach((place) => {
+            place.addEventListener('click', this.play)
+        })
+    }
+    
+    setCurrentPlayer(){
+        this.currentPlayer == this.players[0] 
+        ? this.currentPlayer = this.players[1]
+        : this.currentPlayer = this.players[0]
+        return this.currentPlayer
+    }
+    
+    checkWinner = () => {
+        const winningPositions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+        ];
+        
+        for (let i = 0; i < winningPositions.length; i++) {
+            const [a, b, c] = winningPositions[i];
+            if (this.places[a].innerText &&
+                this.places[a].innerText === this.places[b].innerText &&
+                this.places[a].innerText === this.places[c].innerText) {
+                return this.currentPlayer;
+            }
+        }
+        this.placesRemaining--
+        if (this.placesRemaining == 0){
+            this.end_game()
+        }
+        
+        return null;
+    }
+}
+
+function connect_to_websocket() {
+    const url = 'ws://192.168.1.64:8000/ws/tic-tac-toe/{{ room }}/'
+    return new WebSocket(url)
+}
+
+const game = new Game()
+const ws = connect_to_websocket()
+
+ws.onmessage = (e) => {
+    const data = JSON.parse(e.data)
+    console.log(data)
+    
+    data['place_id'] && document.getElementById(data['place_id']).click()
+    
+}
+</script>
+{% endblock script %}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            height: 100vh;
+            background: linear-gradient(90deg,  rgb(202, 162, 202), rgb(232, 179, 179));
+        }
+        
+        header {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: rgba(255, 255, 255, 0.618);
+            background-color: rgb(78, 48, 78);
+            padding: 20px;
+            text-align: center;
+        }
+
+        #root {
+            max-width: 300px;
+            display: grid;
+            grid-template-areas: "a b c" "d e f" "g h i";
+            gap: 5px;
+            margin: 50px auto;
+        }
+
+        .place {
+            background-color: rgb(125, 90, 150);
+            width: 100px;
+            height: 100px;
+            font-size: 5rem;
+            font-family: bolder;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.462);
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(0px);
+            }
+        }
+
+        .res-div {
+            text-align: center;
+            border-radius: 15px 15px ;
+            box-shadow: 1px 1px 5px rgb(65, 63, 63);
+            position: absolute;
+            top: 16vh;
+            left: calc(50vw - 180px);
+            background-color: rgb(234, 189, 234);
+            padding: 30px;
+            width: 300px;
+            height: 300px;
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(39, 38, 38);
+
+            animation: fade-in 500ms;
+        }
+        #game-name {
+            margin: auto;
+            width: fit-content;
+        }
+
+        #main-form {
+            margin: 100px auto;
+            max-width: 500px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        #main-form > input {
+            padding: 15px;
+            font-size: larger;
+            text-align: center;
+            border-radius: 15px;
+            border: none;
+        } 
+        #input-text:focus {
+            outline: none;
+        }
+        #input-submit {
+            color: rgba(255, 255, 255, 0.829);
+            background-color: rgb(125, 88, 125);
+        }
+
+        @keyframes invalid {
+            from {
+                transform: translateX(-20px);
+            }
+
+            30% {
+                transform: translateX(20px);
+            }
+
+            60% {
+                transform: translateX(-20px);
+            }
+
+            to {
+                transform: translateX(0px);
+            }
+        }
+
+        .invalid {
+            animation: invalid 500ms;
+        }
+        @media (max-width: 500px) {
+            #main-form {
+                max-width: 400px;
+                flex-direction: column;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div id="game-name">
+            <h1>JOGO DA VELHA</h1>
+        </div>
+    </header>
+    {% block content %} 
+    {% endblock content %}
+
+    {% block script %}
+    {% endblock script %}
+    <script>
+        class Title {
+            constructor () {
+                this.title = document.querySelector('#game-name')
+                this.add_link()
+            }
+
+            add_link = () => {
+                this.title.addEventListener('click', () => {
+                    const home_link = '/tic-tac-toe/'
+                    location.href = home_link
+                })
+            }
+        }
+        const title = new Title
+    </script>
+</body>
+</html>

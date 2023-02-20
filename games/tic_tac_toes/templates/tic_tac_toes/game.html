@@ -16,8 +16,8 @@
 {% block script %}
 <script>
     const game = new Game()
-    const ws = connect_to_websocket()
-
+    const url =  'ws://localhost:8000/ws/tic-tac-toe/{{ room }}/'
+    const ws = new WebSocket(url)
     ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         data['place_id'] && document.getElementById(data['place_id']).click()

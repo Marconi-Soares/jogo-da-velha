@@ -28,9 +28,12 @@ class Game {
         document.body.appendChild(win_div)
     }
 
-    make_play = (id) => {
-        // Envia a jogada para o websocket
-        const json_id = JSON.stringify({'place_id':id})
+    make_play = (place) => {
+        // Altera a tela e envia a jogada para o websocket
+        place.classList.add('filled')
+        place.innerText = this.currentPlayer
+
+        const json_id = JSON.stringify({'place_id':place.id})
         ws.send(json_id)
     }
 
@@ -39,11 +42,10 @@ class Game {
         // e verifica se há um ganhador
         const place = e.currentTarget
         if (place.innerText == false) {
-            this.make_play(place.id)
-            place.innerText = this.currentPlayer
+            this.make_play(place)
+            this.next_turn()
             const winner = this.checkWinner()
             winner && this.win_game(winner)
-            this.next_turn()
         }
     }
 

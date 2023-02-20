@@ -1,0 +1,21 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    height: 100vh;
+    background: linear-gradient(90deg,  rgb(202, 162, 202), rgb(232, 179, 179));
+}
+
+header {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgba(255, 255, 255, 0.618);
+    background-color: rgb(78, 48, 78);
+    padding: 20px;
+    text-align: center;
+}
+#game-name {
+    cursor: pointer;
+    margin: auto;
+    width: fit-content;
+}

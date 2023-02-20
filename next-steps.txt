@@ -1,0 +1,4 @@
+> adicionar a model Room 
+> Bloquear a entrada de mais de 2 usuários ao na mesma sala
+> create user view, login, login_required, logout
+> configurar a vez da cada jogador
